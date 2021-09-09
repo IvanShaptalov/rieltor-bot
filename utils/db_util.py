@@ -1,8 +1,7 @@
 from icecream import ic
-from sqlalchemy import Integer, Column, String, BOOLEAN, create_engine, DATETIME
+from sqlalchemy import Integer, Column, String, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, InstrumentedAttribute
-
 import commands
 import config_interpreter
 import constant
@@ -231,5 +230,11 @@ def get_first(table_class):
     row = session.query(table_class).first()
     session.close()
     return row
+
+
+class Snippets:
+    @staticmethod
+    def save_data_to_db(prepared_data):
+        ...
 
 # endregion
