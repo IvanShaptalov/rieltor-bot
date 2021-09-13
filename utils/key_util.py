@@ -1,6 +1,6 @@
 from telebot import types
 
-import commands
+inline_symbols = []
 
 
 def create_reply_keyboard(*titles, is_resize: bool = True, row_width: int = 1, request_contact=None):
@@ -30,8 +30,7 @@ def create_inline_keyboard(switch_inline_query_current_chat=None, callback_data=
 def remove_keyboard():
     markup = types.ReplyKeyboardRemove()
     return markup
-    
-    
+
 
 def create_request_markup(title, request_contact=None, request_location=None):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True).add(

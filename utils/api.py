@@ -23,7 +23,7 @@ def save_all_data_to_db():
         data = get_main_data_by_id(id_)
         if data:
             prepared_data = json_util.prepare_data_to_db(json_data=data)
-            db_util.Snippets.save_data_to_db(prepared_data=prepared_data)
+            db_util.save_data_to_db(prepared_data=prepared_data)
             print(f'data from object # {id_} saved!')
         else:
             print(f'data not loaded - object# {id_}')
