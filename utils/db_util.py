@@ -12,6 +12,7 @@ path_alchemy_local = config_interpreter.alchemy_db_path
 
 Base = declarative_base()
 
+
 # todo create db_util tests
 # region db engine
 def create_db():
@@ -283,7 +284,7 @@ def get_first(table_class):
 
         return row
 
-    # todonow save data in db
+    # solved save data in db
 
 
 def save_obj_house(obj_house: dict):
@@ -318,7 +319,7 @@ def save_flat_list(flat_list: List[dict]):
         target_flat = flat_list[0]
         params_to_dict = ['price', 'flat_id', 'rooms', 'floor', 'area', 'section_id']
         params_to_db = ['price', 'flat_id', 'rooms', 'floor', 'total_area', 'section_id']
-        # todonow check this moment
+        # solved check this moment
         write_objects_to_table(table_class=FreeFlat,
                                object_list=flat_list,
                                params_to_dict=params_to_dict,
@@ -339,7 +340,8 @@ def save_data_to_db(prepared_data: dict):
         save_house_sections(section)
         flats_in_section = try_get_from_dict(section, ['free_flats'])
         # dave flats
-        save_flat_list(flats_in_section)
+        if flats_in_section:
+            save_flat_list(flats_in_section)
     print(prepared_data)
 
 # endregion

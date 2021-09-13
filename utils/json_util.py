@@ -61,7 +61,7 @@ def prepare_data_to_db(json_data) -> dict:
 def try_get_from_dict(data: dict, key_list: list):
     if len(key_list) == 1:
         key = key_list[0]
-        return data[key] or "error in try_get_from_dict"
+        return data[key] or None
     key = key_list.pop(0)
 
     try:
