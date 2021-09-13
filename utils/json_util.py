@@ -1,6 +1,7 @@
 import json
 from copy import copy
-from typing import List
+
+from icecream import ic
 
 
 def prepare_data_to_db(json_data):
@@ -10,14 +11,41 @@ def prepare_data_to_db(json_data):
     object_name = try_get_from_dict(data, copy(key_list))
     key_list.append('houses')
     object_houses = try_get_from_dict(data, copy(key_list))
-    # todonow
+    # solved create flat decompiling
     house_list = []
     for house in object_houses:
+        # todo check this part, this is unstable
         assert isinstance(house, dict)
         name = try_get_from_dict(house, ['name'])
         house_id = try_get_from_dict(house, ['id'])
         house_sections = try_get_from_dict(house, ['sections'])
-        ...
+        section_list = []
+        for section in house_sections:
+            section_id = try_get_from_dict(section, ['id'])
+            parking = try_get_from_dict(section, ['parking'])
+
+            free_flats = []
+            for raw_flat in try_get_from_dict(section, ['units']):
+
+                flat_status = try_get_from_dict(raw_flat, ['status', 'name'])
+                if flat_status.lower() or "exception" == 'вільна':
+                    price = try_get_from_dict(raw_flat, ['current_cost_set'])
+                    flat_id = try_get_from_dict(raw_flat, ['unit_id'])
+                    rooms = try_get_from_dict(raw_flat, ['rooms'])
+                    floor = try_get_from_dict(raw_flat, ['floor'])
+                    area = try_get_from_dict(raw_flat, ['area_total'])
+                    result_flat = {'price': price, 'flat_id': flat_id,
+                                   'rooms': rooms, 'floor': floor,
+                                   'area': area}
+                    free_flats.append(result_flat)
+            result_section = {'section_id': section_id, 'parking': parking,
+                              'house_id': house_id, 'free_flats': free_flats}
+            section_list.append(result_section)
+            ic(result_section)
+        object_house = {'house_name': name, 'house_id': house_id,
+                        'sections': section_list}
+        ic(object_house)
+
     return data
 
 

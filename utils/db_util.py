@@ -46,6 +46,10 @@ class UserStatements(Base):
         return '{}{}{}'.format(self.chat_id, self.statement, self.username)
 
 
+class HouseObj:
+    ...  # todonow create tables and save info
+
+
 # endregion
 
 
