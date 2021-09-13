@@ -3,14 +3,7 @@ import string
 
 import telebot
 
-import commands
-from statements.start_menu import start_menu
-from utils import db_util, key_util
-
-
-def go_to_main_cabinet(message, bot):
-    message.text = commands.start_menu
-    start_menu.handle_callback(message, bot)
+from utils import key_util
 
 
 def id_from_message(message: telebot.types.Message) -> int:

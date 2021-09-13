@@ -1,15 +1,11 @@
-import threading
 import time
-from datetime import datetime
 
 import telebot
 from icecream import ic
 
 import commands
 import config_interpreter
-import constant
-from statements import statement_switcher, useful_methods
-from statements.everyday_event import start_event, delete_expired
+from statements import statement_switcher
 from utils import db_util
 
 error_count = 0
@@ -84,6 +80,5 @@ if __name__ == '__main__':
     # thread = threading.Thread(target=start_event, args=[])
     # thread.start()
     db_util.create_db()
-
+    print("count ", db_util.get_count(db_util.UserStatements))
     start_bot_work()
-

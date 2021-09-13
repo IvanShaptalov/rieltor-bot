@@ -2,12 +2,14 @@ import constant
 from statements.start_menu import start_menu
 
 
+# todonow create bot statements
 def select_statement_message(statement):
     switcher = {
         # region message handlers
         constant.StartMenu.START_MENU: start_menu.handle_message,
         # endregion message handlers
-   }
+    }
+
     try:
         message_func = switcher.get(statement)
         return message_func
