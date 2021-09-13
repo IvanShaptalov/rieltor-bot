@@ -36,7 +36,7 @@ def prepare_data_to_db(json_data):
                     area = try_get_from_dict(raw_flat, ['area_total'])
                     result_flat = {'price': price, 'flat_id': flat_id,
                                    'rooms': rooms, 'floor': floor,
-                                   'area': area}
+                                   'area': area, 'section_id': section_id}
                     free_flats.append(result_flat)
             result_section = {'section_id': section_id, 'parking': parking,
                               'house_id': house_id, 'free_flats': free_flats}

@@ -1,7 +1,7 @@
 from icecream import ic
-from sqlalchemy import Integer, Column, String, create_engine
+from sqlalchemy import Integer, Column, String, create_engine, BigInteger, ForeignKey, BOOLEAN, REAL
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, InstrumentedAttribute
+from sqlalchemy.orm import sessionmaker, InstrumentedAttribute, relationship
 import commands
 import config_interpreter
 import constant
@@ -46,8 +46,35 @@ class UserStatements(Base):
         return '{}{}{}'.format(self.chat_id, self.statement, self.username)
 
 
-class HouseObj:
+class HouseObj(Base):
+    __tablename__ = 'house_obj'
+    house_id = Column('house_id', BigInteger, autoincrement=True, unique=True, primary_key=True)
+    house_name = Column('house_name', String, unique=False)
+    location = Column('location', String, unique=False)
+    sections = relationship("HouseSection", back_populates="house_obj")
+
+
+class HouseSection(Base):
+    __tablename__ = 'house_section'
+    section_id = Column('section_id', BigInteger, autoincrement=True, unique=True, primary_key=True)
+    section_name = Column('section_name', String, unique=False)
+    house_obj_id = Column('house_obj_id_foreign', BigInteger, ForeignKey('house_obj.house_id'))
+    house = relationship('HouseObj', back_populates="house_section")
+    parking = Column('parking', BOOLEAN, unique=False, default=False)
+    flats = relationship("FreeFlat", back_populates="house_section")
     ...  # todonow create tables and save info
+
+
+class FreeFlat(Base):
+    __tablename__ = 'free_flat'
+
+    flat_id = Column('flat_id', BigInteger, autoincrement=True, unique=True, primary_key=True)
+    price = Column('price', BigInteger, default=0, unique=False)
+    rooms = Column('rooms', Integer, default=1, unique=False)
+    floor = Column('floor', Integer, default=1, unique=False)
+    total_area = Column('total_area', REAL, default=0, unique=False)
+    section_id = Column('house_section_id', BigInteger, ForeignKey('house_section.section_id'))
+    section = relationship('HouseSection', back_populates="free_flat")
 
 
 # endregion
