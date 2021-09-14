@@ -37,3 +37,10 @@ def rand_string(str_length):
 def rand_num(n_min, n_max):
     number = random.randint(n_min, n_max)
     return number
+
+
+def try_delete_message(message: telebot.types.Message, bot: telebot.TeleBot):
+    try:
+        bot.delete_message(chat_id=id_from_message(message), message_id=message.id)
+    except Exception as e:
+        print('cant delete message: ', e)
