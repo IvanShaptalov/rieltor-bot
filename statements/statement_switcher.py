@@ -3,7 +3,6 @@ from statements import main_menu
 from statements.start_menu import start_menu
 
 
-# todonow create bot statements
 def select_statement_message(statement):
     switcher = {
         # region message handlers
