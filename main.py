@@ -35,11 +35,6 @@ bot = telebot.TeleBot(config_interpreter.BOT_TOKEN)
 def start_bot_work():
     # text handling (just message,text)
     # user not blocked bot
-    @bot.message_handler(content_types=['photo'])
-    def check_file_id(message):
-        print(message)
-        print(message)
-
     @bot.message_handler(content_types=['text'])
     def answer(message):
 

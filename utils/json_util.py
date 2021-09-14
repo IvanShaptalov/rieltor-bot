@@ -13,6 +13,7 @@ def prepare_data_to_db(json_data) -> dict:
     object_houses = try_get_from_dict(data, copy(key_list))
     # solved create flat decompiling
     house_list = []
+    unique_flat_status = []
     for house in object_houses:
         # todo check this part, this is unstable
         assert isinstance(house, dict)
@@ -29,7 +30,8 @@ def prepare_data_to_db(json_data) -> dict:
 
                 flat_status = try_get_from_dict(raw_flat, ['status', 'name'])
                 # fixme check this condition
-                print(flat_status.lower() or "exception", " == вільна")
+                if flat_status not in unique_flat_status:
+                    unique_flat_status.append(flat_status)
                 if (flat_status.lower() or "exception") == 'вільна':
                     price = try_get_from_dict(raw_flat, ['current_cost_set'])
                     flat_id = try_get_from_dict(raw_flat, ['unit_id'])
@@ -47,12 +49,11 @@ def prepare_data_to_db(json_data) -> dict:
                                           'value_tuple': (section_id, parking, house_id),
                                           'key desc': "section_id, parking, house_id"}}
             section_list.append(result_section)
-            ic(result_section)
         object_house = {"house_obj": {'house_name': name, 'house_id': house_id,
                                       'sections': section_list,
                                       'value_tuple': (name, house_id),
                                       'key desc': "name, house_id"}}
-        ic(object_house)
+        ic(unique_flat_status)
         return object_house
 
     return data
