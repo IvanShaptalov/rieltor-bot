@@ -18,8 +18,8 @@ def handle_message(message: telebot.types.Message, bot: telebot.TeleBot):
 def handle_callback(call: telebot.types.CallbackQuery, bot: telebot.TeleBot):
     if call and call.data and call.message:
         chat_id = useful_methods.id_from_message(call.message)
-        # todonow change statement to select floor
-        # db_util.from_db_get_statement(chat_id=chat_id, message_text=)
+        # solved change statement to select floor > floor_statement
+        db_util.from_db_get_statement(chat_id=chat_id, message_text=commands.select_floor, first_name=call.message.from_user.first_name)
 
         data = call.data
         house = db_util.get_from_db_eq_filter_not_editing(table_class=db_util.HouseObj,

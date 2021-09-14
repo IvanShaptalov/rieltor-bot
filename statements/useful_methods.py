@@ -3,7 +3,7 @@ import string
 
 import telebot
 
-from utils import key_util
+from utils import key_util, db_util
 
 
 def id_from_message(message: telebot.types.Message) -> int:
@@ -44,3 +44,13 @@ def try_delete_message(message: telebot.types.Message, bot: telebot.TeleBot):
         bot.delete_message(chat_id=id_from_message(message), message_id=message.id)
     except Exception as e:
         print('cant delete message: ', e)
+
+
+def firstname_from_message(message: telebot.types.Message):
+    return message.from_user.first_name
+
+
+def change_statement(statement, call, chat_id):
+    # solved changed to > select flat in floor > flat_statement
+    firstname = firstname_from_message(message=call.message)
+    db_util.from_db_get_statement(chat_id=chat_id, message_text=statement, first_name=firstname)

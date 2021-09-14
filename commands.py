@@ -11,6 +11,7 @@ commercial_build = '/commercial_build'
 select_storeroom = '/storeroom'
 
 
+flat_detailed='/flat_detailed'
 # endregion commands
 # add command -> add statement -> add command-statement -> statement switcher -> add function
 
@@ -23,8 +24,9 @@ def select_statement_via_present_command(command_present):
         select_floor: constant.Main.FLOOR_SELECT,
         select_flat: constant.Main.FLAT_SELECT,
         select_flat_by_params: constant.Flat.BY_PARAMS,
-        commercial_build: constant.Comertial.SELECT_COMERTIAL,
+        commercial_build: constant.Commercial.SELECT_COMMERCIAL,
         select_storeroom: constant.Storeroom.SELECT_STOREROOM,
+        flat_detailed: constant.Flat.DETAILED,
         # end command to constant
 
     }
