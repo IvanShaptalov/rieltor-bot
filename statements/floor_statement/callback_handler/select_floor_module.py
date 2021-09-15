@@ -8,16 +8,16 @@ from utils import key_util, db_util
 def handle_callback(call: telebot.types.CallbackQuery, bot: telebot.TeleBot):
     if call.data and call.message:
         chat_id = useful_methods.id_from_message(call.message)
+        data = get_from_db_prepare_data(call.data)
         useful_methods.change_statement(statement=commands.select_flat, call=call, chat_id=chat_id)
-        data = get_from_db_prepare_data(call)
         send_message(call, bot, data)
 
 
 # solved show floors to user
-def get_from_db_prepare_data(call: telebot.types.CallbackQuery):
+def get_from_db_prepare_data(call_id: telebot.types.CallbackQuery):
     section = db_util.get_from_db_eq_filter_not_editing(table_class=db_util.HouseSection,
                                                         identifier=db_util.HouseSection.section_id,
-                                                        value=call.data)
+                                                        value=call_id)
     if isinstance(section, db_util.HouseSection):
         flats = db_util.get_from_db_eq_filter_not_editing(table_class=db_util.FreeFlat,
                                                           identifier=db_util.FreeFlat.section_id,
@@ -46,6 +46,7 @@ def send_message(call: telebot.types.CallbackQuery, bot: telebot.TeleBot, data_t
     chat_id = useful_methods.id_from_message(call.message)
     useful_methods.try_delete_message(call.message, bot)
     if data_to_markup is None:
+        useful_methods.change_statement(statement=commands.select_floor, call=call, chat_id=chat_id)
         bot.send_message(chat_id=chat_id,
                          text='В цій секції немає вільних квартир')
     else:

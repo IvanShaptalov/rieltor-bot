@@ -6,19 +6,19 @@ from utils import db_util, key_util
 
 def handle_callback(call: telebot.types.CallbackQuery, bot: telebot.TeleBot):
     # solved create flat detailed info
-    # todonext add send message to administrator and send info to them about this client
+    # solved add send message to administrator and send info to them about this client
 
     if call.data and call.message:
         chat_id = useful_methods.id_from_message(call.message)
+        data, flat_desc = get_from_db_prepare_data(call.data)
         useful_methods.change_statement(statement=commands.connect_to_manager, call=call, chat_id=chat_id)
-        data, flat_desc = get_from_db_prepare_data(call)
         send_message(call, bot, data, flat_desc)
 
 
-def get_from_db_prepare_data(call: telebot.types.CallbackQuery):
+def get_from_db_prepare_data(call_data):
     flat = db_util.get_from_db_eq_filter_not_editing(table_class=db_util.FreeFlat,
                                                      identifier=db_util.FreeFlat.flat_id,
-                                                     value=call.data)
+                                                     value=call_data)
     if isinstance(flat, db_util.FreeFlat):
         result_data = [{'Забронювати': flat.flat_id}]
         flat_desc = f"Поверх: {flat.floor}-й \nЦіна:{flat.price} грн\nПлоща:{flat.total_area} м2 \nКількість кімнат:{flat.rooms}"
@@ -28,6 +28,7 @@ def get_from_db_prepare_data(call: telebot.types.CallbackQuery):
 def send_message(call: telebot.types.CallbackQuery, bot: telebot.TeleBot, data_to_markup, flat_description):
     chat_id = useful_methods.id_from_message(call.message)
     if data_to_markup is None:
+        useful_methods.change_statement(statement=commands.flat_detailed, call=call, chat_id=chat_id)
         bot.send_message(chat_id=chat_id,
                          text='Сталася помилка, оберіть квартиру пізніше.')
     else:
@@ -36,4 +37,3 @@ def send_message(call: telebot.types.CallbackQuery, bot: telebot.TeleBot, data_t
         bot.send_message(chat_id=chat_id,
                          text=f'Квартира:\n{flat_description}',
                          reply_markup=markup)
-
