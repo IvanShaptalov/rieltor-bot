@@ -12,6 +12,7 @@ select_storeroom = '/storeroom'
 
 
 flat_detailed='/flat_detailed'
+connect_to_manager='/manager'
 # endregion commands
 # add command -> add statement -> add command-statement -> statement switcher -> add function
 
@@ -27,6 +28,7 @@ def select_statement_via_present_command(command_present):
         commercial_build: constant.Commercial.SELECT_COMMERCIAL,
         select_storeroom: constant.Storeroom.SELECT_STOREROOM,
         flat_detailed: constant.Flat.DETAILED,
+        connect_to_manager: constant.Submit.CONNECT_TO_MANAGER,
         # end command to constant
 
     }

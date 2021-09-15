@@ -15,3 +15,4 @@ ic(alchemy_db_path)
 host = config['Server']['host']
 protocol = config['Server']['protocol']
 api_key = config['Server']['api_key']
+manager_link = config['Links']['manager_link']

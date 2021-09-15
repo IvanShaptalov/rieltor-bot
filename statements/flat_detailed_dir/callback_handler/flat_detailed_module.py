@@ -5,12 +5,12 @@ from utils import db_util, key_util
 
 
 def handle_callback(call: telebot.types.CallbackQuery, bot: telebot.TeleBot):
-    # todonow create flat detailed info
+    # solved create flat detailed info
+    # todonext add send message to administrator and send info to them about this client
+
     if call.data and call.message:
         chat_id = useful_methods.id_from_message(call.message)
-        useful_methods.try_delete_message(call.message, bot)
-        useful_methods.change_statement(statement=commands.flat_detailed, call=call, chat_id=chat_id)
-
+        useful_methods.change_statement(statement=commands.connect_to_manager, call=call, chat_id=chat_id)
         data, flat_desc = get_from_db_prepare_data(call)
         send_message(call, bot, data, flat_desc)
 
@@ -32,7 +32,8 @@ def send_message(call: telebot.types.CallbackQuery, bot: telebot.TeleBot, data_t
                          text='Сталася помилка, оберіть квартиру пізніше.')
     else:
         markup = key_util.create_inline_keyboard(callback_data=True, title_to_data=data_to_markup)
-
+        useful_methods.try_delete_message(call.message, bot)
         bot.send_message(chat_id=chat_id,
                          text=f'Квартира:\n{flat_description}',
                          reply_markup=markup)
+

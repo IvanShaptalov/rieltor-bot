@@ -28,6 +28,13 @@ def get_from_db_prepare_data(call: telebot.types.CallbackQuery):
             # solved sort and unique data
             flat_floors_data = [{int(flat.floor): f"{section.section_id}-{flat.floor}"} for flat in flats]
             unique = list(map(dict, set(tuple(sorted(flat.items())) for flat in flat_floors_data)))
+            unique_len = len(unique)
+            for i in range(unique_len - 1):
+                for j in range(0, unique_len - i - 1):
+                    first_key = int(list(unique[j].keys())[0])
+                    second_key = int(list(unique[j + 1].keys())[0])
+                    if first_key < second_key:
+                        unique[j], unique[j + 1] = unique[j + 1], unique[j]
 
             return unique
 

@@ -51,6 +51,16 @@ class UserStatements(Base):
         return '{}{}{}'.format(self.chat_id, self.statement, self.username)
 
 
+class Admin(Base):
+    __tablename__ = 'admin_table'
+
+    chat_id = Column('chat_id', Integer, unique=True, primary_key=True)
+    username = Column('username', String, unique=False)
+
+    def __repr__(self):
+        return 'ADMIN-{}{}'.format(self.chat_id, self.username)
+
+
 class FreeFlat(Base):
     __tablename__ = 'free_flat'
 

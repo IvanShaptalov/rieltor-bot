@@ -14,14 +14,15 @@ def create_reply_keyboard(*titles, is_resize: bool = True, row_width: int = 1, r
 
 
 def create_inline_keyboard(switch_inline_query_current_chat=None, callback_data=False,
-                           title_to_data=None):
+                           title_to_data=None, link=None):
     markup = types.InlineKeyboardMarkup()
     for dictionary in title_to_data:
         for title, data in dictionary.items():
             inline_button = types.InlineKeyboardButton(
                 switch_inline_query_current_chat=switch_inline_query_current_chat,
                 text=title,
-                callback_data=data if callback_data else None)
+                callback_data=data if callback_data else None,
+                url=link)
 
             markup.add(inline_button, row_width=3)
     return markup

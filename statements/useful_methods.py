@@ -2,6 +2,7 @@ import random
 import string
 
 import telebot
+from icecream import ic
 
 from utils import key_util, db_util
 
@@ -41,7 +42,9 @@ def rand_num(n_min, n_max):
 
 def try_delete_message(message: telebot.types.Message, bot: telebot.TeleBot):
     try:
+        print('try delete...')
         bot.delete_message(chat_id=id_from_message(message), message_id=message.id)
+        print('deleted.')
     except Exception as e:
         print('cant delete message: ', e)
 
@@ -54,3 +57,19 @@ def change_statement(statement, call, chat_id):
     # solved changed to > select flat in floor > flat_statement
     firstname = firstname_from_message(message=call.message)
     db_util.from_db_get_statement(chat_id=chat_id, message_text=statement, first_name=firstname)
+
+
+def notify_admins(bot: telebot.TeleBot, message_text):
+    admins = db_util.get_from_db_eq_filter_not_editing(table_class=db_util.Admin,
+                                                       all_objects=True)
+    result_admins = [admin.chat_id for admin in admins]
+    ic('try send info to admins')
+    for admin_chat_id in result_admins:
+        try:
+            bot.send_message(chat_id=admin_chat_id,
+                             text=message_text)
+            print(f'sent {message_text} to admin{admin_chat_id}')
+        except Exception as e:
+            print(e)
+            print(f"Error while try to send notify to admin {admin_chat_id}")
+    ic('send info to admins done.')

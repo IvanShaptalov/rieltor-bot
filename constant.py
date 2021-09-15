@@ -19,3 +19,7 @@ class Commercial:
 
 class Storeroom:
     SELECT_STOREROOM = '/storeroom'
+
+
+class Submit:
+    CONNECT_TO_MANAGER = '/manager'
