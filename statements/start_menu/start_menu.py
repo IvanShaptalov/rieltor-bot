@@ -11,5 +11,5 @@ def handle_message(message: telebot.types.Message, bot: telebot.TeleBot):
     chat_id = useful_methods.id_from_message(message)
     markup = key_util.create_reply_keyboard([commands.select_obj, commands.select_flat_by_params, commands.select_storeroom, commands.commercial_build])
     bot.send_message(chat_id=chat_id,
-                     text='Вас вітає рієлтор бот!Оберіть пункт в меню:',
+                     text='Вітаємо! Для того, щоб підібрати для себе ідеальну квартиру оберіть будь ласка пункт з меню:',
                      reply_markup=markup)

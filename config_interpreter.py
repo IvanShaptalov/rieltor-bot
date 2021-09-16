@@ -12,7 +12,7 @@ BOT_TOKEN = config['Bot']['bot_token']
 
 alchemy_db_path = 'sqlite:///' + os.path.join(base_dir, config['DataBase']['sql_alchemy_path'])
 ic(alchemy_db_path)
-host = config['Server']['host']
+host = config['Server']['host'] or os.environ.get('host')
 protocol = config['Server']['protocol']
-api_key = config['Server']['api_key']
+api_key = config['Server']['api_key'] or os.environ.get('server_api_key')
 manager_link = os.environ.get('manager_link') or config['Links']['manager_link']

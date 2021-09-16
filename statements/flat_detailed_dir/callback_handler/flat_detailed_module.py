@@ -11,7 +11,7 @@ def handle_callback(call: telebot.types.CallbackQuery, bot: telebot.TeleBot):
     if call.data and call.message:
         chat_id = useful_methods.id_from_message(call.message)
         data, flat_desc = get_from_db_prepare_data(call.data)
-        useful_methods.change_statement(statement=commands.connect_to_manager, call=call, chat_id=chat_id)
+        useful_methods.change_statement(statement=commands.connect_to_manager, message=call.message, chat_id=chat_id)
         send_message(call, bot, data, flat_desc)
 
 
@@ -28,7 +28,7 @@ def get_from_db_prepare_data(call_data):
 def send_message(call: telebot.types.CallbackQuery, bot: telebot.TeleBot, data_to_markup, flat_description):
     chat_id = useful_methods.id_from_message(call.message)
     if data_to_markup is None:
-        useful_methods.change_statement(statement=commands.flat_detailed, call=call, chat_id=chat_id)
+        useful_methods.change_statement(statement=commands.connect_to_manager, message=call.message, chat_id=chat_id)
         bot.send_message(chat_id=chat_id,
                          text='Сталася помилка, оберіть квартиру пізніше.')
     else:

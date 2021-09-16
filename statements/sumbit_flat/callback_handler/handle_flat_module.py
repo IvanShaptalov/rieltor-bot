@@ -27,7 +27,7 @@ def send_message(call, bot, flat_desc):
 def handle_callback(call: telebot.types.CallbackQuery, bot: telebot.TeleBot):
     if call.data and call.message:
         chat_id = useful_methods.id_from_message(call.message)
-        useful_methods.change_statement(statement=commands.connect_to_manager, call=call, chat_id=chat_id)
+        useful_methods.change_statement(statement=commands.connect_to_manager, message=call.message, chat_id=chat_id)
         flat_desc = get_from_db_prepare_data(call)
         username = call.from_user.username
         if flat_desc:

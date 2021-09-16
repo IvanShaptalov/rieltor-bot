@@ -53,9 +53,9 @@ def firstname_from_message(message: telebot.types.Message):
     return message.from_user.first_name
 
 
-def change_statement(statement, call, chat_id):
+def change_statement(statement, chat_id, message):
     # solved changed to > select flat in floor > flat_statement
-    firstname = firstname_from_message(message=call.message)
+    firstname = firstname_from_message(message=message)
     db_util.from_db_get_statement(chat_id=chat_id, message_text=statement, first_name=firstname)
 
 

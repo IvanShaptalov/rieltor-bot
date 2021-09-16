@@ -10,6 +10,7 @@ def select_statement_message(statement):
     from statements.floor_statement.message_handler import select_floor_module
     from statements.storeroom_dir.message_handler import storeroom_module
     from statements.flat_detailed_dir.message_handler import flat_detailed_module
+    from statements.flat_by_param.message_handler import filtering
 
     switcher = {
         # region message handlers
@@ -22,6 +23,8 @@ def select_statement_message(statement):
         constant.Commercial.SELECT_COMMERCIAL: comertial_build_module.handle_message,
         constant.Storeroom.SELECT_STOREROOM: storeroom_module.handle_message,
         constant.Flat.DETAILED: flat_detailed_module.handle_message,
+        constant.Flat.FILTER: filtering.handle_message,
+
         # endregion message handlers
     }
 
@@ -41,7 +44,6 @@ def select_statement_callback(statement):
     from statements.storeroom_dir.callback_handler import storeroom_module
     from statements.flat_detailed_dir.callback_handler import flat_detailed_module
     from statements.sumbit_flat.callback_handler import handle_flat_module
-
     switcher = {
         # region callback handlers
 
