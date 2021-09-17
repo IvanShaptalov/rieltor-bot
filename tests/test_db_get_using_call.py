@@ -9,7 +9,7 @@ from utils import db_util
 def test_get_object():
     # solved get valid
     from statements import main_menu
-    valid_key = 1
+    valid_key = 24
     result = main_menu.get_house_obj(valid_key)
     assert isinstance(result, db_util.HouseObj), "db not have valid house "
     invalid_key = 'aboba'
@@ -20,7 +20,7 @@ def test_get_object():
 @pytest.mark.call_data
 def test_get_section():
     from statements import main_menu
-    valid_key = 1
+    valid_key = 24
     result = main_menu.get_sections(valid_key)
     assert isinstance(result, list), "db not have valid sections in house "
     invalid_key = 'aboba'
@@ -30,7 +30,7 @@ def test_get_section():
 
 @pytest.mark.call_data
 def test_get_floor():
-    valid_key = 82
+    valid_key = 91
     from statements.floor_statement.callback_handler import select_floor_module
     result = select_floor_module.get_from_db_prepare_data(valid_key)
     assert isinstance(result, list), "db not have valid floor with flats in this section"
@@ -42,12 +42,13 @@ def test_get_floor():
 
 @pytest.mark.call_data
 def test_get_flats():
-    valid_key = '1-1'
+
+    valid_key = '91-1'  # section id and floor
     result = select_flat_module.get_from_db_prepare_data(valid_key)
     assert isinstance(result, list), "it is not flat list"
     assert isinstance(result[0], dict), "it is not prepared dictionary"
     invalid_keys = ['mo bamba', 'mo-bamba', '', 'mo-1']
-    for invalid_key in invalid_keys:
+    for invalid_key in invalid_keyws:
         result = select_flat_module.get_from_db_prepare_data(invalid_key)
         assert result is None, f"return not None from invalid key {invalid_key}"
 

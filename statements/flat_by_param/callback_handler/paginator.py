@@ -1,6 +1,5 @@
 from telegram_bot_pagination import InlineKeyboardPaginator
 
-import config_interpreter
 from statements import useful_methods
 from utils import db_util
 
@@ -33,7 +32,8 @@ def prepare_flat(flat):
                                                               value=section.house_obj_id)
             if isinstance(house, db_util.HouseObj):
                 parking = "Є паркінг\n" if int(section.parking) == 1 else ""
-                text = f"\nБудинок: {house.house_name} секція - {section.section_id}\nЦіна {flat.price} {flat.currency}\n{parking}" \
+                price = useful_methods.format_num(flat.price)
+                text = f"\nБудинок: {house.house_name} секція - {section.section_id}\nЦіна {price} {flat.currency}\n{parking}" \
                        f"Детальніше:\n/info{flat.flat_id}\n"
                 return text
 

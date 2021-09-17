@@ -9,6 +9,7 @@ from utils import db_util, key_util
 from statements.flat_by_param.callback_handler import paginator
 from statements.flat_detailed_dir.callback_handler import flat_detailed_module
 
+
 def is_flat_id(message: telebot.types.Message):
     """function to check if message have flat id """
     if "/info" in message.text:
@@ -66,15 +67,18 @@ def handle_message(message: telebot.types.Message, bot: telebot.TeleBot):
             ic(len(flats))
             if flats:
                 print(
-                    [f"flat rooms: {flat.rooms} flat area: {flat.total_area} flat_price for m2 {flat.price_m2}" for flat
-                     in
-                     flats])
+                    [
+                        f"flat rooms: {flat.rooms} flat area: {flat.total_area} flat_price for m² {useful_methods.format_num(flat.price_m2)}"
+                        for flat
+                        in
+                        flats])
                 # solved send flat_list by param
+
                 bot.send_message(chat_id=chat_id,
                                  text="Ви обрали квартири з наступними характеристиками:\n"
                                       f"Кількість кімнат : {room_count}\n"
                                       f"Площа : {total_area_min} - {total_area_max} м2\n"
-                                      f"Ціна за м2 : {price_for_m2_min} - {price_for_m2_max}\n"
+                                      f"Ціна за м² : {useful_methods.format_num(price_for_m2_min)} - {useful_methods.format_num(price_for_m2_max)}\n"
                                       f"Квартир знайдено: {len(flats)}",
                                  reply_markup=key_util.KeySnippets.main_menu_key)
                 # solved save association in database
@@ -100,8 +104,8 @@ def check_data(input_data):
         if not isinstance(room_count_result, int):
             return room_count_result
         price_for_m2_result = check_bound_correct(bound_on_str=price_for_m2,
-                                                  error_m1="Ви не правильно заповнили поле ціна за м2.",
-                                                  error_m2="Ціна за м2 некоректна!")
+                                                  error_m1="Ви не правильно заповнили поле ціна за м².",
+                                                  error_m2="Ціна за м² некоректна!")
         if not isinstance(price_for_m2_result, tuple):
             return price_for_m2_result
         total_area_result = check_bound_correct(bound_on_str=total_area,

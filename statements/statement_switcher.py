@@ -44,7 +44,7 @@ def select_statement_callback(statement):
     from statements.storeroom_dir.callback_handler import storeroom_module
     from statements.flat_detailed_dir.callback_handler import flat_detailed_module
     from statements.sumbit_flat.callback_handler import handle_flat_module
-    from statements.flat_by_param.callback_handler import  paginator
+    from statements.flat_by_param.callback_handler import paginator
     switcher = {
         # region callback handlers
 

@@ -4,7 +4,6 @@ import telebot
 from statements import main_menu
 import commands
 from statements import useful_methods
-from utils import db_util, key_util
 
 
 def handle_message(message: telebot.types.Message, bot: telebot.TeleBot):

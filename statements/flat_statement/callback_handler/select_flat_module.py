@@ -35,8 +35,7 @@ def get_from_db_prepare_data(call_data):
                                                               value=section.section_id,
                                                               get_type='many')
             pre_result_flats = list(filter(flat_filter, flats))
-
-            result_flats = [{f'Ціна:{flat.price} Кількість кімнат:{flat.rooms}': flat.flat_id} for flat in pre_result_flats]
+            result_flats = [{f'Ціна:{useful_methods.format_num(flat.price)} Кількість кімнат:{flat.rooms}': flat.flat_id} for flat in pre_result_flats]
             return result_flats
     # solved part
 

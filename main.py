@@ -1,3 +1,5 @@
+import datetime
+import os
 import threading
 import time
 
@@ -74,13 +76,24 @@ def start_bot_work():
 
 def update_info():
     if threading.active_count() < 5:
-        thread = threading.Thread(target=api.save_all_data_to_db)
+        thread = threading.Thread(target=_update)
         thread.setName('api worker')
         thread.start()
 
 
+def _update():
+    while True:
+        seconds = datetime.timedelta(hours=12).total_seconds()
+        print('sleep 12 hours')
+        time.sleep(seconds)
+        api.save_all_data_to_db()
+
+
 if __name__ == '__main__':
     db_util.create_db()
+    if os.environ.get('load_data'):
+        print('load data detected: load')
+        api.save_all_data_to_db()
     print("count ", db_util.get_count(db_util.UserStatements))
     update_info()
     start_bot_work()

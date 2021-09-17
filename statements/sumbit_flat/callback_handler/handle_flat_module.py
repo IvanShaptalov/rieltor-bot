@@ -11,7 +11,8 @@ def get_from_db_prepare_data(call: telebot.types.CallbackQuery):
                                                      identifier=db_util.FreeFlat.flat_id,
                                                      value=call.data)
     if isinstance(flat, db_util.FreeFlat):
-        flat_desc = f"Поверх: {flat.floor}-й \nЦіна:{flat.price} грн\nПлоща:{flat.total_area} м2 \nКількість кімнат:{flat.rooms}"
+
+        flat_desc = f"Поверх: {flat.floor}-й \nЦіна:{useful_methods.format_num(flat.price)} грн\nПлоща:{flat.total_area} м2 \nКількість кімнат:{flat.rooms}"
         return flat_desc
 
 
