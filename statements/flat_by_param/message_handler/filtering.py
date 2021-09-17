@@ -1,4 +1,5 @@
 import telebot
+from icecream import ic
 
 import commands
 from statements import useful_methods
@@ -10,32 +11,44 @@ def handle_message(message: telebot.types.Message, bot: telebot.TeleBot):
     chat_id = useful_methods.id_from_message(message)
     useful_methods.change_statement(statement=commands.filtering, message=message, chat_id=chat_id)
     result = check_data(input_data=message.text)
-    if isinstance(result, str):
-        bot.send_message(chat_id=chat_id,
-                         text=result + "\nспробуйте ввести дані знову")
+    section = get_section(chat_id)
+    if isinstance(section, db_util.UserChosenField):
+        if isinstance(result, str):
+            bot.send_message(chat_id=chat_id,
+                             text=result + "\nспробуйте ввести дані знову")
+        else:
+            t = 1000
+            dictionary = result[1]
+            room_count = dictionary['room_count']
+            price_for_m2_min = dictionary['price_for_m2'][0] * t
+            price_for_m2_max = dictionary['price_for_m2'][1] * t
+            total_area_min = dictionary['total_area'][0]
+            total_area_max = dictionary['total_area'][1]
+            # todonow define section
+            print("info: ", result[1])
+            house_id = section.section_id
+            ic(house_id)
+            ident_value = [db_util.FreeFlat.section.has(house_obj_id=house_id),
+                           db_util.FreeFlat.rooms == room_count,
+                           db_util.FreeFlat.total_area >= total_area_min,
+                           db_util.FreeFlat.total_area <= total_area_max,
+                           db_util.FreeFlat.price_m2 >= price_for_m2_min,
+                           db_util.FreeFlat.price_m2 <= price_for_m2_max]
+            flats = db_util.get_from_db_multiple_filter(table_class=db_util.FreeFlat,
+                                                        get_type='many',
+                                                        identifier_to_value=ident_value)
+            ic(len(flats))
+            if flats:
+                print([f"flat rooms: {flat.rooms} flat area: {flat.total_area} flat_price for m2 {flat.price_m2}" for flat in flats])
+            # todonow send flat_list by param
+            print('all ok start filter and get flats')
+            bot.send_message(chat_id=chat_id,
+                             text=f"все ок дані: {result}",
+                             reply_markup=key_util.KeySnippets.main_menu_key)
     else:
-        dictionary = result[1]
-        room_count = dictionary['room_count']
-        price_for_m2_min = dictionary['price_for_m2'][0]
-        price_for_m2_max = dictionary['price_for_m2'][1]
-        total_area_min = dictionary['total_area'][0]
-        total_area_max = dictionary['total_area'][1]
-        # todonow define section
-
-        ident_value = [db_util.FreeFlat.section_id == 1,
-                       db_util.FreeFlat.rooms == room_count,
-                       db_util.FreeFlat.total_area >= total_area_min,
-                       db_util.FreeFlat.total_area <= total_area_max,
-                       db_util.FreeFlat.price_m2 >= price_for_m2_min,
-                       db_util.FreeFlat.price_m2 <= price_for_m2_max]
-        flats = db_util.get_from_db_multiple_filter(table_class=db_util.FreeFlat,
-                                                    get_type='many',
-                                                    identifier_to_value=ident_value)
-        print(len(flats))
-        # todonow send flat_list by param
-        print('all ok start filter and get flats')
         bot.send_message(chat_id=chat_id,
-                         text=f"все ок дані: {result}")
+                         text='Данна секція вже не існує',
+                         reply_markup=key_util.KeySnippets.main_menu_key)
 
 
 # todonext create test to this moment
@@ -64,6 +77,13 @@ def check_data(input_data):
                                   'total_area': total_area_result})
     else:
         return "Ви ввели не всі дані"
+
+
+def get_section(chat_id):
+    choice = db_util.get_from_db_multiple_filter(table_class=db_util.UserChosenField,
+                                                 identifier_to_value=[db_util.UserChosenField.chat_id == chat_id],
+                                                 get_type='one')
+    return choice
 
 
 def check_bound_correct(bound_on_str: str, error_m1, error_m2):

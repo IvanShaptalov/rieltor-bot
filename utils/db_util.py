@@ -51,6 +51,13 @@ class UserStatements(Base):
         return '{}{}{}'.format(self.chat_id, self.statement, self.username)
 
 
+class UserChosenField(Base):
+    __tablename__ = "user_chosen_field"
+
+    chat_id = Column('chat_id', Integer, unique=True, primary_key=True)
+    section_id = Column('section_id', BigInteger, ForeignKey('house_section.section_id'))
+
+
 class Admin(Base):
     __tablename__ = 'admin_table'
 
