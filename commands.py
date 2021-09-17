@@ -2,8 +2,9 @@ import constant
 
 # region commands
 start_menu = '/start'
-select_obj = 'обрати квартиру'
-
+select_obj = 'обрати ЖК'
+zh_k = '/choose_obj'
+by_param = '/flat_by_param'
 filtering = '/filter_flat'
 select_floor = '/select_floor'
 select_flat = '/select flat'
@@ -32,6 +33,8 @@ def select_statement_via_present_command(command_present):
         flat_detailed: constant.Flat.DETAILED,
         connect_to_manager: constant.Submit.CONNECT_TO_MANAGER,
         filtering: constant.Flat.FILTER,
+        by_param: constant.Flat.BY_PARAMS,
+        zh_k: constant.Main.MENU
         # end command to constant
 
     }

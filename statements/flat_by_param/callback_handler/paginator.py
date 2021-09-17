@@ -52,7 +52,7 @@ def send_page(message, bot, page=1):
     flat_list = get_flats_from_db(chat_id)
     if flat_list is None:
         return
-    # todonow prepare using page
+    # solved prepare using page
     flats_by_page = 4
     result_flats = prepare_flats(flat_list, page, flats_by_page)
     last = 1 if int(len(flat_list) % flats_by_page) != 0 else 0

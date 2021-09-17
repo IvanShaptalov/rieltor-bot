@@ -8,7 +8,7 @@ def handle_message(message: telebot.types.Message, bot: telebot.TeleBot):
     chat_id = useful_methods.id_from_message(message)
     houses = db_util.get_from_db_eq_filter_not_editing(table_class=db_util.HouseObj,
                                                        all_objects=True)
-    house_data = [{house.house_name: house.house_id} for house in houses]
+    house_data = [{f"ЖК {house.house_name}": house.house_id} for house in houses]
     markup = key_util.create_inline_keyboard(callback_data=True, title_to_data=house_data)
     bot.send_message(chat_id=chat_id,
                      text='Оберіть об`єкт:',

@@ -56,7 +56,7 @@ def handle_message(message: telebot.types.Message, bot: telebot.TeleBot):
             print("info: ", result[1])
             house_id = section.section_id
             ic(house_id)
-            # todo write tests to this function
+            # solved write tests to this function
             flats = filter_flats(house_id=house_id,
                                  room_count=room_count,
                                  total_area_min=total_area_min,
@@ -88,7 +88,7 @@ def handle_message(message: telebot.types.Message, bot: telebot.TeleBot):
                          reply_markup=key_util.KeySnippets.main_menu_key)
 
 
-# todonext create test to this moment
+# solved create test to this moment
 def check_data(input_data):
     arr = input_data.split(',')
     if len(arr) == 3:

@@ -1,3 +1,4 @@
+import threading
 import time
 
 import telebot
@@ -6,7 +7,7 @@ from icecream import ic
 import commands
 import config_interpreter
 from statements import statement_switcher
-from utils import db_util
+from utils import db_util, api
 
 error_count = 0
 
@@ -71,7 +72,16 @@ def start_bot_work():
     start_polling()
 
 
+def update_info():
+    if threading.active_count() < 5:
+        thread = threading.Thread(target=api.save_all_data_to_db)
+        thread.setName('api worker')
+        thread.start()
+
+
 if __name__ == '__main__':
     db_util.create_db()
     print("count ", db_util.get_count(db_util.UserStatements))
+    update_info()
     start_bot_work()
+    # todonext пробел:пробел , цена

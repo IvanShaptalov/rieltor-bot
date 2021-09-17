@@ -73,3 +73,8 @@ def notify_admins(bot: telebot.TeleBot, message_text):
             print(e)
             print(f"Error while try to send notify to admin {admin_chat_id}")
     ic('send info to admins done.')
+
+
+def format_num(num):
+    return "{:,}".format(num)
+

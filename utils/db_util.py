@@ -13,7 +13,6 @@ path_alchemy_local = config_interpreter.alchemy_db_path
 Base = declarative_base()
 
 
-# todo create db_util tests
 # region db engine
 def create_db():
     engine_db = get_engine_by_path(engine_path=path_alchemy_local)

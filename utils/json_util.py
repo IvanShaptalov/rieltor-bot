@@ -15,7 +15,7 @@ def prepare_data_to_db(json_data) -> dict:
     house_list = []
     unique_flat_status = []
     for house in object_houses:
-        # todo check this part, this is unstable
+        # solved check this part, this is unstable
         assert isinstance(house, dict)
         name = try_get_from_dict(house, ['name'])
         house_id = try_get_from_dict(house, ['id'])
@@ -29,7 +29,7 @@ def prepare_data_to_db(json_data) -> dict:
             for raw_flat in try_get_from_dict(section, ['units']):
 
                 flat_status = try_get_from_dict(raw_flat, ['status', 'name'])
-                # fixme check this condition
+                # solved check this condition
                 if flat_status not in unique_flat_status:
                     unique_flat_status.append(flat_status)
                 if (flat_status.lower() or "exception") == 'вільна':
@@ -47,11 +47,12 @@ def prepare_data_to_db(json_data) -> dict:
                                    'value_tuple': (price, flat_id, rooms, floor, area, section_id, price_m2, currency),
                                    'key_tuple': "price, flat_id, rooms, floor, area, section_id, price_m2, currency"}
                     free_flats.append(result_flat)
-            result_section = {"section": {'section_id': section_id, 'parking': parking,
-                                          'house_id': house_id, 'free_flats': free_flats,
-                                          'value_tuple': (section_id, parking, house_id),
-                                          'key desc': "section_id, parking, house_id"}}
-            section_list.append(result_section)
+            if len(free_flats) >= 1:
+                result_section = {"section": {'section_id': section_id, 'parking': parking,
+                                              'house_id': house_id, 'free_flats': free_flats,
+                                              'value_tuple': (section_id, parking, house_id),
+                                              'key desc': "section_id, parking, house_id"}}
+                section_list.append(result_section)
         object_house = {"house_obj": {'house_name': name, 'house_id': house_id,
                                       'sections': section_list,
                                       'value_tuple': (name, house_id),
