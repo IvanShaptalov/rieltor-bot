@@ -72,8 +72,6 @@ def start_bot_work():
 
 
 if __name__ == '__main__':
-    # thread = threading.Thread(target=start_event, args=[])
-    # thread.start()
     db_util.create_db()
     print("count ", db_util.get_count(db_util.UserStatements))
     start_bot_work()

@@ -29,7 +29,7 @@ def handle_callback(call: telebot.types.CallbackQuery, bot: telebot.TeleBot):
         chat_id = useful_methods.id_from_message(call.message)
         useful_methods.change_statement(statement=commands.connect_to_manager, message=call.message, chat_id=chat_id)
         flat_desc = get_from_db_prepare_data(call)
-        username = call.from_user.username
+        username = "{} {} {}".format("@"+call.from_user.username or "", call.from_user.first_name or "", call.from_user.last_name or "")
         if flat_desc:
             useful_methods.notify_admins(bot,  f'Нове замовлення:\n{flat_desc}\n{username}')
             send_message_to_user(bot, call.message, flat_desc)
