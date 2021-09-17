@@ -1,7 +1,7 @@
 from typing import List
 from utils.json_util import try_get_from_dict
 from icecream import ic
-from sqlalchemy import Integer, Column, String, create_engine, BigInteger, ForeignKey, BOOLEAN, REAL
+from sqlalchemy import Integer, Column, String, create_engine, BigInteger, ForeignKey, BOOLEAN, REAL, Table
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, InstrumentedAttribute, relationship
 import commands
@@ -35,17 +35,24 @@ def get_engine_by_path(engine_path):
 
 session = _get_session()
 
-
 # endregion
 
 
 # region tables
+
+association_user_to_flat = Table('user_to_flat_association', Base.metadata,
+                                 Column('user_chat_id', ForeignKey("user_statements.chat_id")),
+                                 Column('flat_id', ForeignKey("free_flat.flat_id")))
+
+
 class UserStatements(Base):
     __tablename__ = "user_statements"
 
     chat_id = Column('chat_id', Integer, unique=True, primary_key=True)
     statement = Column('statement', String, unique=False)
     username = Column('username', String, unique=False)
+
+    flat = relationship("FreeFlat", secondary=association_user_to_flat)
 
     def __repr__(self):
         return '{}{}{}'.format(self.chat_id, self.statement, self.username)
@@ -332,6 +339,10 @@ def get_first(table_class):
     # solved save data in db
 
 
+# endregion
+
+
+# region task data saving
 def save_obj_house(obj_house: dict):
     print("save obj house: ", obj_house, "...")
     name, house_id = try_get_from_dict(obj_house, ['value_tuple'])
@@ -389,4 +400,25 @@ def save_data_to_db(prepared_data: dict):
             save_flat_list(flats_in_section)
     print(prepared_data)
 
+
+def save_flats_to_chat(chat_id, flats):
+    with session:
+        user = session.query(UserStatements).filter(UserStatements.chat_id == chat_id).first()
+        if isinstance(user, UserStatements):
+            user.flat.clear()
+            user.flat.extend(flats)
+        session.commit()
+
+
+def drop_chat(chat_id):
+    with session:
+        user = session.query(UserStatements).filter(UserStatements.chat_id == chat_id).first()
+        user.flat.clear()
+        session.commit()
+
+
+def get_all_flats_from_associate_table(chat_id):
+    with session:
+        user = session.query(UserStatements).filter(UserStatements.chat_id == chat_id).first()
+        return user.flat or None
 # endregion

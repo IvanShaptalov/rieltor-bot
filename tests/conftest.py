@@ -23,4 +23,4 @@ def filter_params(invalid_filter_params, valid_filter_params):
 
 @pytest.fixture
 def flat_filter_params():
-    return ...  # todonext after pagination
+    return ...  # todo after pagination
