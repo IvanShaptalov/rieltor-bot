@@ -60,3 +60,8 @@ def test_get_one_flat():
     invalid_key = 'aboba'
     result = flat_detailed_module.get_from_db_prepare_data(invalid_key)
     assert result is None, f"invalid key :{invalid_key} raise error and result - :{result} while try get flat"
+
+
+@pytest.mark.call_data
+def test_get_flat_by_params(flat_filter_params):
+    ...  # todonext after pagination

@@ -3,7 +3,6 @@ from icecream import ic
 
 import commands
 from statements import useful_methods
-from statements.main_menu import get_house_obj
 from utils import db_util, key_util
 
 
@@ -24,31 +23,55 @@ def handle_message(message: telebot.types.Message, bot: telebot.TeleBot):
             price_for_m2_max = dictionary['price_for_m2'][1] * t
             total_area_min = dictionary['total_area'][0]
             total_area_max = dictionary['total_area'][1]
-            # todonow define section
+            # solved define section
             print("info: ", result[1])
             house_id = section.section_id
             ic(house_id)
-            ident_value = [db_util.FreeFlat.section.has(house_obj_id=house_id),
-                           db_util.FreeFlat.rooms == room_count,
-                           db_util.FreeFlat.total_area >= total_area_min,
-                           db_util.FreeFlat.total_area <= total_area_max,
-                           db_util.FreeFlat.price_m2 >= price_for_m2_min,
-                           db_util.FreeFlat.price_m2 <= price_for_m2_max]
-            flats = db_util.get_from_db_multiple_filter(table_class=db_util.FreeFlat,
-                                                        get_type='many',
-                                                        identifier_to_value=ident_value)
+            # todo write tests to this moment
+            flats = filter_flats(house_id=house_id,
+                                 room_count=room_count,
+                                 total_area_min=total_area_min,
+                                 total_area_max=total_area_max,
+                                 price_for_m2_min=price_for_m2_min,
+                                 price_for_m2_max=price_for_m2_max)
             ic(len(flats))
             if flats:
-                print([f"flat rooms: {flat.rooms} flat area: {flat.total_area} flat_price for m2 {flat.price_m2}" for flat in flats])
-            # todonow send flat_list by param
+                print(
+                    [f"flat rooms: {flat.rooms} flat area: {flat.total_area} flat_price for m2 {flat.price_m2}" for flat
+                     in
+                     flats])
+            # solved send flat_list by param
             print('all ok start filter and get flats')
             bot.send_message(chat_id=chat_id,
-                             text=f"все ок дані: {result}",
+                             text="Ви обрали квартири з наступними характеристиками:\n"
+                                  f"Кількість кімнат : {room_count}\n"
+                                  f"Площа : {total_area_min} - {total_area_max} м2\n"
+                                  f"Ціна за м2 : {price_for_m2_min} - {price_for_m2_max}\n"
+                                  f"Квартир знайдено: {len(flats)}",
                              reply_markup=key_util.KeySnippets.main_menu_key)
+            # todonow send pagination
     else:
         bot.send_message(chat_id=chat_id,
                          text='Данна секція вже не існує',
                          reply_markup=key_util.KeySnippets.main_menu_key)
+
+
+def filter_flats(house_id,
+                 room_count,
+                 total_area_min,
+                 total_area_max,
+                 price_for_m2_min,
+                 price_for_m2_max):
+    ident_value = [db_util.FreeFlat.section.has(house_obj_id=house_id),
+                   db_util.FreeFlat.rooms == room_count,
+                   db_util.FreeFlat.total_area >= total_area_min,
+                   db_util.FreeFlat.total_area <= total_area_max,
+                   db_util.FreeFlat.price_m2 >= price_for_m2_min,
+                   db_util.FreeFlat.price_m2 <= price_for_m2_max]
+    flats = db_util.get_from_db_multiple_filter(table_class=db_util.FreeFlat,
+                                                get_type='many',
+                                                identifier_to_value=ident_value)
+    return flats
 
 
 # todonext create test to this moment

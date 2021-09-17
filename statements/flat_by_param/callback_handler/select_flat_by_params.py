@@ -35,5 +35,5 @@ def save_section(section_id, chat_id):
                                chat_id=chat_id,
                                section_id=section_id)
     print('saved')
-    # todonext create filtering flats using house > rooms, price, area
+    # solved create filtering flats using house > rooms, price, area
 
