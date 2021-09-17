@@ -34,15 +34,18 @@ def prepare_data_to_db(json_data) -> dict:
                     unique_flat_status.append(flat_status)
                 if (flat_status.lower() or "exception") == 'вільна':
                     price = try_get_from_dict(raw_flat, ['current_cost_set'])
+                    price_m2 = try_get_from_dict(raw_flat, ['current_price_set'])
+                    currency = try_get_from_dict(raw_flat, ['current_currency_set']) or try_get_from_dict(raw_flat, [
+                        'company_default_currency'])
                     flat_id = try_get_from_dict(raw_flat, ['unit_id'])
                     rooms = try_get_from_dict(raw_flat, ['rooms'])
                     floor = try_get_from_dict(raw_flat, ['floor'])
                     area = try_get_from_dict(raw_flat, ['area_total'])
                     result_flat = {'price': price, 'flat_id': flat_id,
                                    'rooms': rooms, 'floor': floor,
-                                   'area': area, 'section_id': section_id,
-                                   'value_tuple': (price, flat_id, rooms, floor, area, section_id),
-                                   'key_tuple': "price, flat_id, rooms, floor, area, section_id"}
+                                   'area': area, 'section_id': section_id, 'price_m2': price_m2, 'currency': currency,
+                                   'value_tuple': (price, flat_id, rooms, floor, area, section_id, price_m2, currency),
+                                   'key_tuple': "price, flat_id, rooms, floor, area, section_id, price_m2, currency"}
                     free_flats.append(result_flat)
             result_section = {"section": {'section_id': section_id, 'parking': parking,
                                           'house_id': house_id, 'free_flats': free_flats,
@@ -62,7 +65,11 @@ def prepare_data_to_db(json_data) -> dict:
 def try_get_from_dict(data: dict, key_list: list):
     if len(key_list) == 1:
         key = key_list[0]
-        return data[key] or None
+        # noinspection PyBroadException
+        try:
+            return data[key]
+        except:
+            return None
     key = key_list.pop(0)
 
     try:

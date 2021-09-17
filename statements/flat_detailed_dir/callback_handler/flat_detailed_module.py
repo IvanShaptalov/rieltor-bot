@@ -21,7 +21,7 @@ def get_from_db_prepare_data(call_data):
                                                      value=call_data)
     if isinstance(flat, db_util.FreeFlat):
         result_data = [{'Забронювати': flat.flat_id}]
-        flat_desc = f"Поверх: {flat.floor}-й \nЦіна:{flat.price} грн\nПлоща:{flat.total_area} м2 \nКількість кімнат:{flat.rooms}"
+        flat_desc = f"Поверх: {flat.floor}-й \nЦіна:{flat.price} {flat.currency}\nПлоща:{flat.total_area} м2 \nКількість кімнат:{flat.rooms}"
         return result_data, flat_desc
 
 

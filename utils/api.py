@@ -19,7 +19,7 @@ def get_main_data_by_id(obj_id: int):
 
 def save_all_data_to_db():
     data_list = []
-    for id_ in range(1, 9):
+    for id_ in range(1, 10):
         data = get_main_data_by_id(id_)
         if data:
             prepared_data = json_util.prepare_data_to_db(json_data=data)

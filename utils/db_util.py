@@ -66,6 +66,8 @@ class FreeFlat(Base):
 
     flat_id = Column('flat_id', BigInteger, unique=True, primary_key=True, autoincrement=True)
     price = Column('price', BigInteger, default=0, unique=False)
+    price_m2 = Column('price_m2', BigInteger, default=0, unique=False)
+    currency = Column('currency', String, unique=False)
     rooms = Column('rooms', Integer, default=1, unique=False)
     floor = Column('floor', Integer, default=1, unique=False)
     total_area = Column('total_area', REAL, default=0, unique=False)
@@ -190,6 +192,32 @@ def get_from_db_eq_filter_not_editing(table_class, identifier=None, value=None, 
                     filter(identifier != value).all()
 
             return objs
+
+
+def get_from_db_multiple_filter(table_class, identifier_to_value: list, get_type='one',
+                                all_objects: bool = None):
+    """WARNING! DO NOT USE THIS OBJECT TO EDIT DATA IN DATABASE! IT ISN`T WORK!
+    USE ONLY TO SHOW DATA...
+    :param table_class - select table
+    :param identifier_to_value: - select filter column example [UserStatements.statement == 'hello_statement',next]
+    note that UserStatements.statement is instrumented attribute
+    :param get_type - string 'many' or 'one'
+    :param all_objects - return all rows from table"""
+    many = 'many'
+    one = 'one'
+    with session:
+        if all_objects is True:
+            objects = session.query(table_class).all()
+
+            return objects
+        if get_type == one:
+            obj = session.query(table_class).filter(*identifier_to_value).first()
+
+            return obj
+        elif get_type == many:
+            objects = session.query(table_class).filter(*identifier_to_value).all()
+
+            return objects
 
 
 # endregion
@@ -327,8 +355,8 @@ def save_house_sections(house_section: dict):
 def save_flat_list(flat_list: List[dict]):
     if flat_list:
         target_flat = flat_list[0]
-        params_to_dict = ['price', 'flat_id', 'rooms', 'floor', 'area', 'section_id']
-        params_to_db = ['price', 'flat_id', 'rooms', 'floor', 'total_area', 'section_id']
+        params_to_dict = ['price', 'flat_id', 'rooms', 'floor', 'area', 'section_id', 'price_m2', 'currency']
+        params_to_db = ['price', 'flat_id', 'rooms', 'floor', 'total_area', 'section_id', 'price_m2', 'currency']
         # solved check this moment
         write_objects_to_table(table_class=FreeFlat,
                                object_list=flat_list,

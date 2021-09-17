@@ -14,6 +14,24 @@ def handle_message(message: telebot.types.Message, bot: telebot.TeleBot):
         bot.send_message(chat_id=chat_id,
                          text=result + "\nспробуйте ввести дані знову")
     else:
+        dictionary = result[1]
+        room_count = dictionary['room_count']
+        price_for_m2_min = dictionary['price_for_m2'][0]
+        price_for_m2_max = dictionary['price_for_m2'][1]
+        total_area_min = dictionary['total_area'][0]
+        total_area_max = dictionary['total_area'][1]
+        # todonow define section
+
+        ident_value = [db_util.FreeFlat.section_id == 1,
+                       db_util.FreeFlat.rooms == room_count,
+                       db_util.FreeFlat.total_area >= total_area_min,
+                       db_util.FreeFlat.total_area <= total_area_max,
+                       db_util.FreeFlat.price_m2 >= price_for_m2_min,
+                       db_util.FreeFlat.price_m2 <= price_for_m2_max]
+        flats = db_util.get_from_db_multiple_filter(table_class=db_util.FreeFlat,
+                                                    get_type='many',
+                                                    identifier_to_value=ident_value)
+        print(len(flats))
         # todonow send flat_list by param
         print('all ok start filter and get flats')
         bot.send_message(chat_id=chat_id,
@@ -67,6 +85,7 @@ def check_bound_correct(bound_on_str: str, error_m1, error_m2):
 
 
 def check_room_count(room_count: str):
+    room_count = room_count.replace(' ', '')
     if not room_count.isdigit():
         return "Кількість кімнат має вводитися цифрою."
     else:
